@@ -71,21 +71,38 @@ export default {
       countries: userData,
       searchCountry: "",
       selectedRegion: "",
-      regions: ["Africa", "America", "Asia", "Europe", "Oceania"],
+      regions: ["Africa", "Asia", "Europe", "Oceania"],
     };
   },
   computed: {
     filteredCountry() {
       return this.countries.filter((country) => {
         const searchQuery = this.searchCountry.toLowerCase();
-        return (
+        const matchesSearch =
           (country.name && country.name.toLowerCase().includes(searchQuery)) ||
           (country.capital &&
-            country.capital.toLowerCase().includes(searchQuery))
-        );
+            country.capital.toLowerCase().includes(searchQuery));
+
+        const matchesRegion = this.selectedRegion
+          ? country.region === this.selectedRegion
+          : true; // If no region is selected, include all
+
+        return matchesSearch && matchesRegion;
       });
     },
   },
+  // computed: {
+  //   filteredCountry() {
+  //     return this.countries.filter((country) => {
+  //       const searchQuery = this.searchCountry.toLowerCase();
+  //       return (
+  //         (country.name && country.name.toLowerCase().includes(searchQuery)) ||
+  //         (country.capital &&
+  //           country.capital.toLowerCase().includes(searchQuery))
+  //       );
+  //     });
+  //   },
+  // },
   setup() {
     const isDark = useDark(); // VueUse dark mode hook
     return { isDark };
